@@ -76,10 +76,21 @@ ax = data_main_texttypes.boxplot(column=type_cols, by="text_type")
 #%%
 #grouped = data.groupby(by=['text_type'])["rel_direct"].mean()
 grouped = data.groupby(by=['text_type'])
-matplotlib.rc('xtick', labelsize=20)
-matplotlib.rc('ytick', labelsize=20)
-#font = {'size'   : 22}
-#matplotlib.rc('font', **font)
+#matplotlib.rc('xtick', labelsize=20)
+#matplotlib.rc('ytick', labelsize=20)
+font = {'size'   : 22}
+matplotlib.rc('font', **font)
 
 ax = data_main_texttypes.boxplot(column=["rel_direct"], by="text_type", figsize=(20, 10))
 plt.savefig(os.path.join(outputdir, "boxplot_texttype_rel_direct.png"))
+
+#%%
+
+renamed = data_main_texttypes.rename(index=str, columns=
+{"rel_direct": "direkt", "rel_indirect": "indirekt", "rel_freeIndirect": "frei indirect", "rel_reported": "erzählt",
+ "text_type": "Texttyp", "rel_indirect freeIndirect": "ind/frei ind"})
+
+renamed_grouped = renamed.groupby(by=["Texttyp"])["direkt", "indirekt", "erzählt",  "frei indirect", "ind/frei ind",].mean()
+
+ax2 = renamed_grouped.plot(kind="bar", rot=0, figsize=(20, 10))
+plt.savefig(os.path.join(outputdir, "barplot_texttype_rel_direct.png"))
